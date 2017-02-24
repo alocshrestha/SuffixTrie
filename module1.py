@@ -16,7 +16,7 @@ class Node:
          return "\nChildren: " + str({k:v for k,v in self.children.items() if v is not None}) + " \nStart: " + str(self.start) + " \nEnd: " + str(self.end)
 
 class SuffixTreeNode:            
-    pu.db
+#    pu.db
     def __init__(self, txt, s1):
 #         self.start = 0
 #         self.end = 0
@@ -48,13 +48,11 @@ class SuffixTreeNode:
             
         
     def newNode(self, start, end):
-        if self.root == None:
-            self.root = Node()
-        if self.Node == None:
-            self.Node = Node()
-            	
-        for i in xrange(self.MAXCHAR):
-            self.Node.children[i] = None
+        #if self.root == None:
+        #    self.root = Node()        
+        self.Node = Node()            	
+        #for i in xrange(self.MAXCHAR):
+        #    self.Node.children[i] = None
              #self.Node.children.insert(i, None)    
         self.Node.suffixLink = self.root
         self.start = start
@@ -88,18 +86,21 @@ class SuffixTreeNode:
                 self.activeEdge = pos                
             
             #There is no outgoing edge starting with activeEdge from activeNode    
-            if self.activeNode.children[ord(self.text[self.activeEdge])] == None:
+            #if self.activeNode.children[ord(self.text[self.activeEdge])] == None:
             #if self.text[self.activeEdge] not in self.activeNode.children:
-                self.activeNode.children[ord(self.text[self.activeEdge])] = self.newNode(pos, self.leafEnd)        
+            if ord(self.text[self.activeEdge]) not in self.activeNode.children:
+                self.activeNode.children[ord(self.text[self.activeEdge])] = self.newNode(pos, self.leafEnd)  
                 
                 if self.lastNewNode != None:
                     self.lastNewNode.suffixLink = self.activeNode
                     self.lastNewNode = None
                     
             else: #There is an outgoing edge starting with activeEdge from activeNode                
-                next_node = self.activeNode.children[ord(self.text[self.activeEdge])]                
-#                 if self.walkDown(next_node):
-#                     continue
+                #next_node = self.activeNode.children[ord(self.text[self.activeEdge])]                
+                next_node = self.activeNode                
+
+                #if self.walkDown(next_node):
+                #    continue
                 self.walkDown(next_node)
                 
                 if self.text[next_node.start + self.activeLength] == self.text[pos]:
@@ -145,15 +146,24 @@ class SuffixTreeNode:
         """ Print the suffix tree along with setting suffix index
             So tree will be printed in DFS manner
             Each edge along with it's suffix index will be printed """
-        if n == None: return
+        if n == {}: 
+            print "------------------------BASE CASE MET------------------------"
+            return
         if n.start != -1: # a non-root node
-            self.printf(n.start, n.end)
+            #self.printf(n.start, n.end)
+            #if you flip it it works
+            self.printf(n.end, n.start)
+
         
         leaf = 1
-        for i in xrange(self.MAXCHAR):
-            if n.children[i] != None: #Current node is not a leaf as it has outgoing edges from it
+        #for i in xrange(self.MAXCHAR):
+        #    if n.children[i] != None: #Current node is not a leaf as it has outgoing edges from it
+        #        leaf = 0
+        #        self.setSuffixIndexByDFS(n.children[i], labelHeight + self.edgeLength(n.children[i]))
+        for k,v in n.children.iteritems():
+            if n.children[k] is not {}:
                 leaf = 0
-                self.setSuffixIndexByDFS(n.children[i], labelHeight + self.edgeLength(n.children[i]))
+                self.setSuffixIndexByDFS(n.children[k], labelHeight + self.edgeLength(n.children[k]))
                 
         if leaf == 1:
             for i in xrange(n.start, n.end):
