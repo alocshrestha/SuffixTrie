@@ -1,4 +1,5 @@
 import string
+import pudb
 class Node:
     def __init__(self, suffixLink = None):
         self.children = {}
@@ -14,6 +15,7 @@ class Node:
          return "\nChildren: " + str({k:v for k,v in self.children.items() if v is not None}) + " \nStart: " + str(self.start) + " \nEnd: " + str(self.end)
 
 class SuffixTreeNode:            
+    pu.db
     def __init__(self, txt, s1):
 #         self.start = 0
 #         self.end = 0
